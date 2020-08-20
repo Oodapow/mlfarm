@@ -29,4 +29,4 @@ steps:
       cd tests
       pip install pytest pytest-azurepipelines
       pytest
-    displayName: 'pytest'
+    displayName: 'Run pytest'
