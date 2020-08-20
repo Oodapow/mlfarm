@@ -1,7 +1,8 @@
 import os
 import re
 import yaml
-from visitor import BaseVisitor
+
+from mlfarm.yml.visitor import BaseVisitor
 
 
 class Transform(BaseVisitor):

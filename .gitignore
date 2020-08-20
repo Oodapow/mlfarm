@@ -1,1 +1,3 @@
 *.pyc
+mlfarm.egg-info
+.pytest_cache
