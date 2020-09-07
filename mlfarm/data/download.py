@@ -7,7 +7,7 @@ def assert_test(x):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-f', '--file', default=os.path.abspath(os.path.join(__file__, '..', 'keywords.txt')), type=lambda x: [assert_test(os.path.isfile(x)), x][-1])
+    parser.add_argument('-f', '--file', default=os.path.abspath(os.path.join(__file__, '..', 'keywords.list')), type=lambda x: [assert_test(os.path.isfile(x)), x][-1])
     parser.add_argument('-l', '--limit', default=100, type= lambda x: [int(x), assert_test(x>0), x][-1])
     parser.add_argument('-d', '--dataset', default='dataset', type=lambda x: [assert_test(not os.path.isdir(x)), x][-1])
     parser.add_argument('-t', '--timeout', default=60, type= lambda x: [int(x), assert_test(x>0), x][-1])

@@ -1,0 +1,1 @@
+obj: '{{ relative: ./b.yml }}'

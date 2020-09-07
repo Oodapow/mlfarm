@@ -1,0 +1,3 @@
+ok: true
+ale: '{{ relative: ./a/d.yaml}}'
+nok: '{{ relative: ./a/asd.yml }}'

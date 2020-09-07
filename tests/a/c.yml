@@ -1,3 +1,0 @@
-ok: true
-ale: '{{d.yaml}}'
-nok: '{{ asd.yml }}'
