@@ -1,0 +1,154 @@
+class: experiment.Autoencoder
+args:
+  train_dataset_builder:
+    builder: true
+    class: data.ImagesDataset
+    args:
+      root: dataset
+      loader:
+        class: data.PILImageLoader
+        args:
+          mode: RGB
+      transform: 
+        class: torchvision.transforms.Compose
+        args:
+          transforms:
+            - class: torchvision.transforms.RandomCrop
+              args:
+                size: 1024
+                pad_if_needed: true
+            - class: torchvision.transforms.ToTensor
+            - class: torchvision.transforms.Normalize
+              args:
+                mean:
+                  - 0.485
+                  - 0.456
+                  - 0.406
+                std:
+                  - 0.229
+                  - 0.224
+                  - 0.225
+  train_data_loader_builder:
+    builder: true
+    class: torch.utils.data.DataLoader
+    args:
+      batch_size: 1
+      shuffle: true
+  optimizer_builders:
+    - builder: true
+      class: torch.optim.Adam
+      args:
+        lr: 0.00002
+  encoder:
+    class: torch.nn.Sequential
+    args:
+    - class: torch.nn.Conv2d
+      args:
+        in_channels: 3
+        kernel_size: 7
+        out_channels: 64
+        padding: 3
+        stride: 2
+    - class: torch.nn.MaxPool2d
+      args:
+        kernel_size: 2
+        stride: 2
+    - class: blocks.RepeaterBlock
+      args:
+        times: 2
+        block_builder:
+          class: blocks.Conv2d3x3ReLuResBlock
+          builder: true
+          args:
+            ch_in: 64
+            ch_mid: 64
+            ch_out: 64
+    - class: blocks.Conv2d3x3ReLuMaxPoolResBlock
+      args:
+        ch_in: 64
+        ch_mid: 128
+        ch_out: 128
+        stride: 2
+    - class: blocks.Conv2d3x3ReLuResBlock
+      args:
+        ch_in: 128
+        ch_mid: 128
+        ch_out: 128
+    - class: blocks.Conv2d3x3ReLuMaxPoolResBlock
+      args:
+        ch_in: 128
+        ch_mid: 256
+        ch_out: 256
+        stride: 2
+    - class: blocks.Conv2d3x3ReLuResBlock
+      args:
+        ch_in: 256
+        ch_mid: 256
+        ch_out: 256
+    - class: blocks.Conv2d3x3ReLuMaxPoolResBlock
+      args:
+        ch_in: 256
+        ch_mid: 512
+        ch_out: 512
+        stride: 2
+    - class: blocks.Conv2d3x3ReLuResBlock
+      args:
+        ch_in: 512
+        ch_mid: 512
+        ch_out: 512
+  decoder:
+    class: torch.nn.Sequential
+    args:
+    - class: torch.nn.Conv2d
+      args:
+        in_channels: 512
+        kernel_size: 3
+        out_channels: 256
+        padding: 1
+    - class: torch.nn.Upsample
+      args:
+        scale_factor: 2
+    - class: torch.nn.Conv2d
+      args:
+        in_channels: 256
+        kernel_size: 3
+        out_channels: 128
+        padding: 1
+    - class: torch.nn.Upsample
+      args:
+        scale_factor: 2
+    - class: torch.nn.Conv2d
+      args:
+        in_channels: 128
+        kernel_size: 3
+        out_channels: 64
+        padding: 1
+    - class: torch.nn.Upsample
+      args:
+        scale_factor: 2
+    - class: torch.nn.Conv2d
+      args:
+        in_channels: 64
+        kernel_size: 3
+        out_channels: 32
+        padding: 1
+    - class: torch.nn.Upsample
+      args:
+        scale_factor: 2
+    - class: torch.nn.Conv2d
+      args:
+        in_channels: 32
+        kernel_size: 3
+        out_channels: 16
+        padding: 1
+    - class: torch.nn.Upsample
+      args:
+        scale_factor: 2
+    - class: torch.nn.Conv2d
+      args:
+        in_channels: 16
+        kernel_size: 3
+        out_channels: 3
+        padding: 1
+  loss:
+    class: torch.nn.MSELoss
