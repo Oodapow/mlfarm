@@ -33,7 +33,7 @@ steps:
     displayName: 'Add .pypirc'
 
   - script: |
-      python -m twine upload --repository pypi dist/*
+      python -m twine upload --disable-progress-bar dist/*
     displayName: 'Upload to pypi'
   
   - script: |
