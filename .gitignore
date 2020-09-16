@@ -2,3 +2,7 @@
 mlfarm.egg-info
 .pytest_cache
 dataset
+dist
+*.gv*
+*__pycache__*
+*build

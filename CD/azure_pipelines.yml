@@ -1,0 +1,14 @@
+trigger:
+  branches:
+    include:
+    - refs/tags/RELEASE*
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - script: |
+      cd tests
+      pip install pytest pytest-azurepipelines
+      pytest
+    displayName: 'Run pytest'
