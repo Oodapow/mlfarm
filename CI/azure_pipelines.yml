@@ -26,7 +26,9 @@ steps:
     displayName: 'Install MLFarm'
 
   - script: |
-      cd tests
-      pip install pytest pytest-azurepipelines
-      pytest
-    displayName: 'Run pytest'
+      python mlfarm/core.py -v
+    displayName: 'Run Core'
+  
+  - script: |
+      python mlfarm/debug.py -v
+    displayName: 'Run Debug'
