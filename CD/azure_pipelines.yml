@@ -19,8 +19,10 @@ steps:
   
   - script: |
       MLFARM_VERSION=$(git describe --exact-match --tags $(git log -n1 --pretty='%h'))
-      MLFARM_VERSION="${MLFARM_VERSION//v}"
+      export MLFARM_VERSION="${MLFARM_VERSION//v}"
+      echo "Version: ${MLFARM_VERSION}"
       python setup.py sdist bdist_wheel
+      echo "Content:"
       ls dist
     displayName: 'Make archives'
   
@@ -28,6 +30,12 @@ steps:
       cat >> $HOME/.pypirc <<EOL
       $(mlfarm-pypi-twine.pypirc)
       EOL
+    displayName: 'Add .pypirc'
+
+  - script: |
       python -m twine upload --repository pypi dist/*
-      rm -rf $HOME/.pypirc
     displayName: 'Upload to pypi'
+  
+  - script: |
+      rm -rf $HOME/.pypirc
+    displayName: 'Remove .pypirc'
