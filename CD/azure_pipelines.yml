@@ -1,14 +1,33 @@
 trigger:
   branches:
     include:
-    - refs/tags/RELEASE*
+    - refs/tags/v*
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.7'
+    displayName: 'Use Python 3.7'
+    
   - script: |
-      cd tests
-      pip install pytest pytest-azurepipelines
-      pytest
-    displayName: 'Run pytest'
+      python -m pip install --upgrade pip
+      pip install --user --upgrade setuptools wheel twine
+    displayName: 'Install dependencies'
+  
+  - script: |
+      MLFARM_VERSION=$(git describe --exact-match --tags $(git log -n1 --pretty='%h'))
+      MLFARM_VERSION="${MLFARM_VERSION//v}"
+      python setup.py sdist bdist_wheel
+      ls dist
+    displayName: 'Make archives'
+  
+  - script: |
+      cat >> $HOME/.pypirc <<EOL
+      $(mlfarm-pypi-twine.pypirc)
+      EOL
+      python -m twine upload --repository pypi dist/*
+      rm -rf $HOME/.pypirc
+    displayName: 'Upload to pypi'

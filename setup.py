@@ -1,11 +1,12 @@
 import setuptools
+import os
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="mlfarm",
-    version="0.0.1",
+    version=os.environ.get('MLFARM_VERSION', '0.0.0'),
     author="Alexandru Petre",
     author_email="petre.v.alexandru@gmail.com",
     description="Tools for fast development of Machine Learning projects.",
