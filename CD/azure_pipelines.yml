@@ -27,15 +27,8 @@ steps:
     displayName: 'Make archives'
   
   - script: |
-      cat >> $HOME/.pypirc <<EOL
-      $(mlfarm-pypi-twine.pypirc)
-      EOL
-    displayName: 'Add .pypirc'
-
-  - script: |
       python -m twine upload --disable-progress-bar dist/*
     displayName: 'Upload to pypi'
-  
-  - script: |
-      rm -rf $HOME/.pypirc
-    displayName: 'Remove .pypirc'
+    env:
+      TWINE_USERNAME: __token__
+      TWINE_PASSWORD: $(mlfarm-pypi-token)
