@@ -12,7 +12,7 @@ setuptools.setup(
     description="Tools for fast development of Machine Learning projects.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/Oodapow/mlfarm",
+    url="https://github.com/Oodapow/mlfarm/tree/release",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
